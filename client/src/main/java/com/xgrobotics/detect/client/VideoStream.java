@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.xgrobotics.detect.lib.DetectConst;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -44,7 +46,6 @@ public class VideoStream {
     private boolean mStreaming;
     private SurfaceHolder.Callback mSurfaceHolderCallback;
 
-    private final static int TRANS_MODE = 0;//0:H264,1:YUVImage
     private ByteBuffer[] mBuffers = null;
     private MediaCodec.BufferInfo mBufferInfo = new MediaCodec.BufferInfo();
     private byte[] mIOBuffer;
@@ -315,7 +316,7 @@ public class VideoStream {
 //                    Log.d("Stefan", "Measured: " + 1000000L / (now - oldnow) + " fps.");
 //                }
                 try {
-                    if (TRANS_MODE == 0) {
+                    if (DetectConst.TRANS_MODE == 0) {
                         if (inputBuffers == null) {
                             inputBuffers = mMediaCodec.getInputBuffers();
                         }
@@ -345,7 +346,7 @@ public class VideoStream {
                             Log.e(TAG, "No buffer available !");
                         }
 
-                    } else if (TRANS_MODE == 1) {
+                    } else if (DetectConst.TRANS_MODE == 1) {
                         YuvImage yuvImage = new YuvImage(data, ImageFormat.NV21, VIDEO_WIDTH, VIDEO_HEIGHT, null);
                         if (yuvImage != null) {
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -373,7 +374,7 @@ public class VideoStream {
             mCamera.addCallbackBuffer(new byte[/*convertor.getBufferSize()*/getYuvBuffer()]);
         mCamera.setPreviewCallbackWithBuffer(callback);
 
-        if (TRANS_MODE == 0) {
+        if (DetectConst.TRANS_MODE == 0) {
             int colorFormat = selectColorFormat(selectCodec(MIME), MIME);
             mMediaCodec = MediaCodec.createEncoderByType(MIME);
             MediaFormat mediaFormat = MediaFormat.createVideoFormat(MIME, VIDEO_HEIGHT, VIDEO_WIDTH);
@@ -394,7 +395,7 @@ public class VideoStream {
             @Override
             public void run() {
                 sender.init();
-                if (TRANS_MODE == 0) {
+                if (DetectConst.TRANS_MODE == 0) {
                     mBuffers = mMediaCodec.getOutputBuffers();
                     while (!Thread.interrupted() && mIsRunning) {
                         ByteBuffer mBuffer;

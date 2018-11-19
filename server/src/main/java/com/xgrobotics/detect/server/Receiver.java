@@ -19,10 +19,9 @@ public class Receiver implements Runnable {
     private Decoder mDecoder;
     private byte[] mIOBuffer;
     private Thread t;
-    public static final int TRAN_MODE = 0;//0:h.264 1:bitmap
 
     public Receiver(SurfaceView surfaceView) {
-        if (TRAN_MODE == 0) {
+        if (DetectConst.TRANS_MODE == 0) {
             try {
                 mDecoder = new Decoder(surfaceView.getHolder().getSurface());
             } catch (IOException e) {
@@ -91,7 +90,7 @@ public class Receiver implements Runnable {
             DataInputStream dis;
             socket = mServerSocket.accept();
             dis = new DataInputStream(socket.getInputStream());
-            if (TRAN_MODE == 0) {
+            if (DetectConst.TRANS_MODE  == 0) {
                 int[] len = new int[1];
                 long[] ts = new long[1];
                 readNAL(dis, len, ts);
@@ -100,7 +99,7 @@ public class Receiver implements Runnable {
                     readNAL(dis, len, ts);
                     mDecoder.decode(mIOBuffer, len[0], ts[0]);
                 }
-            } else if (TRAN_MODE == 1) {
+            } else if (DetectConst.TRANS_MODE == 1) {
                 while (!t.isInterrupted()) {
                     readFrame(dis);
                 }

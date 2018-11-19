@@ -4,6 +4,7 @@ package com.xgrobotics.detect.lib;
  * Created by Stefan on 2018/10/18.
  */
 public interface DetectConst {
+    int TRANS_MODE = 0;//0：h.264 1:jpeg
     byte PACKET_PREFIX = '$';//包前缀
 
     byte PACKET_TYPE_FIND_DEVICE_REQ = 0x01; // 搜索请求
